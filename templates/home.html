@@ -1,0 +1,52 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Gana Producciones</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    
+     <header class="main">
+        <div class="logo-barra">
+            <a href="{% url 'cartelera' %}" class="logo">
+                <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
+            </a>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
+                    <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+
+                    {% if request.user.is_authenticated %}
+                    <li><span>Hola, {{ request.user.first_name|default:request.user.username }}</span></li>
+                    <li><a href="{% url 'logout' %}">Salir</a></li>
+                    {% else %}
+
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="overlay">
+            <h2 class="eslogan">“Profesionales de la alegría”</h2>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>Todos los derechos reservados © Gana Producciones</p>
+    </footer> 
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión - Gana Productora</title>
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <header class="main">
+        <div class="logo-barra">
+            <a href="{% url 'cartelera' %}" class="logo">
+                <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
+            </a>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
+                    <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+
+                    {% if request.user.is_authenticated %}
+                    <li style="pointer-events:none;opacity:.85">
+                        Hola, {{ request.user.first_name|default:request.user.username }}
+                    </li>
+                    <li><a href="{% url 'logout' %}">Salir</a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <form action="{{ app_path }}" method="post" class="formulario" id="login-form">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Iniciar Sesión</legend>
+
+                {% if messages %}
+                <ul class="msgs">
+                    {% for m in messages %}
+                    <li>{{ m }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if form.non_field_errors %}
+                <div class="errores">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="form-row">
+                    <label for="{{ form.username.id_for_label }}">Email:</label>
+                    {{ form.username }}
+                    {% for e in form.username.errors %}
+                        <div class="errores">{{ e }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-row">
+                    {{ form.password.label_tag }}
+                    {{ form.password }}
+                    {% for e in form.password.errors %}
+                        <div class="errores">{{ e }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="submit-row">
+                    <input type="submit" value="Ingresar" class="btn-login">
+                </div>
+
+                <div class="crear-usuario">
+                    <a href="{% url 'nuevo_usuario' %}">Crear cuenta nueva</a>
+                </div>
+            </fieldset>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <p>Todos los derechos reservados © Gana Producciones</p>
+    </footer>
+</body>
+</html>

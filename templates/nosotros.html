@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nosotros - Gana Producciones</title>
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<header class="main">
+    <div class="logo-barra">
+        <a href="{% url 'cartelera' %}" class="logo">
+            <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
+        </a>
+        <nav class="menu">
+            <ul>
+                <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
+                <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
+                <li><a href="{% url 'nosotros' %}" class="activo">Nosotros</a></li>
+
+                {% if request.user.is_authenticated %}
+                <li><span>Hola, {{ request.user.first_name|default:request.user.username }}</span></li>
+                <li><a href="{% url 'logout' %}">Salir</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section class="nosotros-section">
+    <div class="nosotros-texto">
+        <h1>Sobre Gana Producciones</h1>
+        <p>
+            En <strong>Gana Producciones</strong> nos apasiona crear experiencias únicas 
+            que combinan el humor, la creatividad y el talento de los mejores artistas del país.  
+            Somos una productora especializada en <strong>shows de stand up</strong> que busca conectar 
+            al público con el arte de reír, compartiendo momentos inolvidables en cada presentación.
+        </p>
+        <p>
+            Nuestro equipo se encarga de cada detalle: desde la selección de artistas hasta la puesta en escena, 
+            garantizando espectáculos de calidad profesional, con un estilo moderno, cercano y auténtico.  
+            Creemos en el poder del humor como forma de encuentro y de expresión.
+        </p>
+    </div>
+
+    <div class="nosotros-slider">
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros1.jpg' %}" alt="Gana Producciones 1"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros2.jpg' %}" alt="Gana Producciones 2"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros8.jpg' %}" alt="Gana Producciones 8"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros9.jpg' %}" alt="Gana Producciones 9"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros3.jpg' %}" alt="Gana Producciones 3"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros10.jpg' %}" alt="Gana Producciones 10"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros4.jpg' %}" alt="Gana Producciones 4"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros5.jpg' %}" alt="Gana Producciones 5"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros12.jpg' %}" alt="Gana Producciones 12"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros13.jpg' %}" alt="Gana Producciones 13"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros14.jpg' %}" alt="Gana Producciones 14"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros6.jpg' %}" alt="Gana Producciones 6"></div>
+        <div class="nosotros-slide"><img src="{% static 'img/nosotros7.jpg' %}" alt="Gana Producciones 7"></div>
+    </div>
+</section>
+
+<footer class="footer-nosotros">
+    <p>© 2025 Gana Producciones. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear cuenta - Gana Productora</title>
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="main">
+        <div class="logo-barra">
+            <a href="{% url 'cartelera' %}" class="logo">
+                <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
+            </a>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="login-container">
+        <form method="post" action="{% url 'crear_usuario' %}" class="formulario">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Crear cuenta</legend>
+
+                {% if messages %}
+                <ul class="msgs">
+                    {% for m in messages %}
+                    <li>{{ m }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+
+                <div class="form-row">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" required>
+                </div>
+
+                <div class="form-row">
+                    <label>Apellido</label>
+                    <input type="text" name="apellido" required>
+                </div>
+
+                <div class="form-row">
+                    <label>Email (será tu usuario)</label>
+                    <input type="email" name="email" required>
+                </div>
+
+                <div class="form-row">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" required>
+                </div>
+
+                <div class="submit-row">
+                    <button type="submit" class="btn-login">Crear</button>
+                </div>
+            </fieldset>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <p>Todos los derechos reservados © Gana Producciones</p>
+    </footer>
+</body>
+</html>
+

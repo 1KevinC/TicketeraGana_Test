@@ -1,0 +1,96 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Stand Up de Parejas- Gana Producciones</title>
+   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <!-- menu -->
+<header class="main">
+    <div class="logo-barra">
+        <a href="{% url 'cartelera' %}" class="logo">
+            <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
+        </a>
+        <nav class="menu">
+            <ul>
+                    <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
+                    <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+
+                    {% if request.user.is_authenticated %}
+                    <li><span>Hola, {{ request.user.first_name|default:request.user.username }}</span></li>
+                    <li><a href="{% url 'logout' %}">Salir</a></li>
+                    {% else %}
+
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+        </nav>
+    </div>
+</header>
+  
+  <main class="container">
+    <div class="imagen-show">
+     <img src="{% static 'img/parejas.jpg' %}" alt="Show 1">
+    </div>
+
+    <div class="info-show">
+      <h2>Stand Up de Parejas</h2>
+      <p><strong>Idiomas:</strong> Español</p>
+      <p><strong>Duración:</strong> 1h</p>
+      <form class="form-compra">
+        <label for="fecha">Fecha y hora:</label>
+        <select id="fecha" name="fecha">
+          <option>Jueves 23/09 - 20hs</option>
+          <option>Viernes 24/09 - 21hs</option>
+          <option>Sábado 25/09 - 22hs</option>
+        </select>
+
+        <label for="entradas">Cantidad de entradas:</label>
+        <input type="number" id="entradas" name="entradas" min="1" max="10" value="1">
+
+        <p class="aviso"><strong>Información importante:</strong> Revisá tu pedido atentamente. Una vez confirmado, no se admitirán cambios ni cancelaciones.</p>
+        <p class="aviso">Al finalizar el proceso de pago recibirás un mail con tu entrada en formato QR al Gmail registrado en tu usuario.</p>
+
+        <button type="button" class="btn-comprar1">Comprar</button>
+      </form>
+    </div>
+  </main>
+
+  <section class="ubicacion">
+  <h3>Ubicación</h3>
+  <p>
+    <strong>Sala Konzert Café - Paseo La Plaza:</strong>
+    Av. Corrientes 1660 C1042AAP, C1042 AAP, Cdad. Autónoma de Buenos Aires
+  </p>
+
+  <div class="ubicacion-contenido">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.988358979311!2d-58.39278849059782!3d-34.60445587284121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccb0025487385%3A0x2bd604e5f9d26022!2sCAFE%20KONCERT!5e0!3m2!1ses!2sar!4v1759103442744!5m2!1ses!2sar"
+      loading="lazy">
+    </iframe>
+
+    <div class="como-llegar">
+      <h4>Cómo llegar:</h4>
+      <p><strong>Colectivos:</strong> 5, 6, 7, 12, 23, 24, 26, 29, 37, 39, 50, 60, 75, 98, 99, 102, 105, 109, 111, 115, 124, 140, 146, 150, 180</p>
+      <p><strong>Subtes (Metro):</strong> CALLAO (Línea B), URUGUAY (Línea B)</p>
+    </div>
+  </div>
+
+  <a 
+    href="https://maps.app.goo.gl/jcYi8FPjjJ24oodV8"     target="_blank"
+    class="btn-maps">
+    Ver en Maps
+  </a>
+</section>
+
+
+  <footer>
+    <p>&copy; 2025 Gana Producciones - Todos los derechos reservados</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrataciones - Gana Producciones</title>
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/contrataciones.css' %}">
+</head>
+
+<body class="contrataciones-page">  
+
+    <header class="main">
+        <div class="logo-barra">
+            <a href="{% url 'cartelera' %}" class="logo">
+                <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
+            </a>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
+                    <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+
+                    {% if request.user.is_authenticated %}
+                    <li><span>Hola, {{ request.user.first_name|default:request.user.username }}</span></li>
+                    <li><a href="{% url 'logout' %}">Salir</a></li>
+                    {% else %}
+
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="contrataciones-container">
+        <h1>Contrataciones para tus eventos</h1>
+        <p>
+            En <strong>Gana Producciones</strong> ofrecemos servicios integrales de contratación para 
+            todo tipo de eventos: obras teatrales, cumpleaños, fiestas empresariales y más.
+        </p>
+        <p>
+            Nuestro equipo te asesora en la elección de artistas, técnicos y equipamiento para que tu evento
+            sea inolvidable. Si deseás recibir atención personalizada, comunicate con nosotros por WhatsApp.
+        </p>
+
+        <a href="https://wa.me/5491111111111" target="_blank" class="btn-whatsapp">
+            💬 Contáctanos
+        </a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Gana Producciones - Todos los derechos reservados</p>
+    </footer>
+
+</body>
+</html>

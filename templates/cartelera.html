@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cartelera - Gana Producciones</title>
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<header class="main">
+    <div class="logo-barra">
+        <a href="{% url 'cartelera' %}" class="logo">
+            <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
+        </a>
+        <nav class="menu">
+            <ul>
+                <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
+                <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
+                <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="contenedor-cartelera">
+    <h2 class="titulo-cartelera">Próximos Shows</h2>
+
+    <section class="lista-shows">
+
+        <!-- Show 1 -->
+        <article class="tarjeta-show">
+            <img src="{% static 'img/parejas2.jpg' %}" alt="Show 1" class="imagen-show">
+            <!-- Flex + columna para que el botón quede abajo -->
+            <div class="contenido-show" style="display:flex; flex-direction:column;">
+                <h3 class="nombre-show">Noche de Stand Up</h3>
+                <p class="descripcion-show">Un espectáculo cargado de humor, improvisación y risas aseguradas.</p>
+                <p class="detalle-show"><strong>Comediante:</strong> Juan Pérez</p>
+                <p class="detalle-show"><strong>Público:</strong> +18</p>
+                <p class="detalle-show"><strong>Calificación:</strong> ⭐⭐⭐⭐☆</p>
+                <a href="{% url 'show1' %}" class="btn-comprar1" style="margin-top:auto;">Comprar</a>
+            </div>
+        </article>
+
+        <!-- Show 2 -->
+        <article class="tarjeta-show">
+            <img src="{% static 'img/nosoyyo2.jpg' %}" alt="Show 2" class="imagen-show">
+            <div class="contenido-show" style="display:flex; flex-direction:column;">
+                <h3 class="nombre-show">No soy Yo sos Vos</h3>
+                <p class="descripcion-show">Comedia irreverente que rompe esquemas de pareja y no deja indiferente a nadie.</p>
+                <p class="detalle-show"><strong>Comediante:</strong> María López</p>
+                <p class="detalle-show"><strong>Público:</strong> +16</p>
+                <p class="detalle-show"><strong>Calificación:</strong> ⭐⭐⭐⭐⭐</p>
+                <a href="{% url 'show2' %}" class="btn-comprar2" style="margin-top:auto;">Comprar</a>
+            </div>
+        </article>
+
+        <!-- Show 3 -->
+        <article class="tarjeta-show">
+            <img src="{% static 'img/nochescomedia2.jpg' %}" alt="Show 3" class="imagen-show">
+            <div class="contenido-show" style="display:flex; flex-direction:column;">
+                <h3 class="nombre-show">Noches de Comedia</h3>
+                <p class="descripcion-show">Un show para todo el mundo, nos reimos juntos de nuestra vida cotidiana.</p>
+                <p class="detalle-show"><strong>Comediante:</strong> Carlos Ramírez</p>
+                <p class="detalle-show"><strong>Público:</strong> +13</p>
+                <p class="detalle-show"><strong>Calificación:</strong> ⭐⭐⭐⭐☆</p>
+                <a href="{% url 'show3' %}" class="btn-comprar3" style="margin-top:auto;">Comprar</a>
+            </div>
+        </article>
+
+        <!-- Show 4 -->
+        <article class="tarjeta-show">
+            <img src="{% static 'img/esc.sup2.jpg' %}" alt="Show 4" class="imagen-show">
+            <div class="contenido-show" style="display:flex; flex-direction:column;">
+                <h3 class="nombre-show">Escuela de Superhéroes</h3>
+                <p class="descripcion-show">Nos divertimos en los personajes de tus superheroes favoritos</p>
+                <p class="detalle-show"><strong>Comediante:</strong> Carlos Ramírez</p>
+                <p class="detalle-show"><strong>Público:</strong> +13</p>
+                <p class="detalle-show"><strong>Calificación:</strong> ⭐⭐⭐⭐☆</p>
+                <!-- anclado abajo -->
+                <a href="{% url 'show4' %}" class="btn-comprar4" style="margin-top:auto;">Comprar</a>
+            </div>
+        </article>
+
+    </section>
+</main>
+
+<footer class="footer">
+    <p>Todos los derechos reservados © Gana Producciones</p>
+</footer>
+</body>
+</html>
