@@ -5,9 +5,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
+from django.conf import settings
+
+import mercadopago
 
 from .models_usuarios import Usuario
-from .models import Funcion  # usamos la tabla 'funcion' real de Render
+from .models import Funcion
 
 
 # ---------------------- LOGIN / LOGOUT ----------------------
@@ -122,11 +125,38 @@ def compra(request):
     return render(request, 'compra.html')
 
 
+# ---------------------- FUNCIÓN DE PAGO MERCADO PAGO ----------------------
+
+def pagar_view(request, idfuncion):
+    """Genera una preferencia de pago en Mercado Pago para la función seleccionada."""
+    funcion = get_object_or_404(Funcion, pk=idfuncion)
+    sdk = mercadopago.SDK(settings.MERCADOPAGO_ACCESS_TOKEN)
+
+    preference_data = {
+        "items": [
+            {
+                "title": f"Entrada para función {funcion.idfuncion}",
+                "quantity": 1,
+                "unit_price": float(funcion.precio),
+            }
+        ],
+        "back_urls": {
+            "success": "https://tu-dominio.com/success",
+            "failure": "https://tu-dominio.com/failure",
+            "pending": "https://tu-dominio.com/pending"
+        },
+        "auto_return": "approved",
+    }
+
+    preference_response = sdk.preference().create(preference_data)
+    preference = preference_response["response"]
+
+    return redirect(preference["init_point"])
+
+
 # ---------------------- SHOWS ----------------------
 
-# SHOW 1 - conecta con la tabla "funcion" en Render
 def show1(request):
-    # Cambiá el idobra según el ID real de "Stand Up de Parejas"
     funciones = Funcion.objects.filter(idobra=12).order_by('fecha', 'hora')
 
     if request.method == "POST":
@@ -137,7 +167,10 @@ def show1(request):
         if cantidad <= funcion.cupo:
             funcion.cupo -= cantidad
             funcion.save(update_fields=["cupo"])
-            messages.success(request, f"Compra realizada correctamente. Entradas restantes: {funcion.cupo}")
+            messages.success(request, f"Compra iniciada. Redirigiendo a Mercado Pago...")
+
+            # Redirige a la vista de pago
+            return redirect("pagar", idfuncion=funcion.idfuncion)
         else:
             messages.error(request, "No hay suficientes entradas disponibles.")
 
@@ -147,7 +180,6 @@ def show1(request):
 
 
 def show2(request):
-    # Cambiar idobra por el ID de la obra correspondiente
     funciones = Funcion.objects.filter(idobra=9).order_by('fecha', 'hora')
 
     if request.method == "POST":
@@ -158,7 +190,8 @@ def show2(request):
         if cantidad <= funcion.cupo:
             funcion.cupo -= cantidad
             funcion.save(update_fields=["cupo"])
-            messages.success(request, f"Compra realizada. Entradas restantes: {funcion.cupo}")
+            messages.success(request, f"Compra iniciada. Redirigiendo a Mercado Pago...")
+            return redirect("pagar", idfuncion=funcion.idfuncion)
         else:
             messages.error(request, "No hay suficientes entradas disponibles.")
 
@@ -178,7 +211,8 @@ def show3(request):
         if cantidad <= funcion.cupo:
             funcion.cupo -= cantidad
             funcion.save(update_fields=["cupo"])
-            messages.success(request, f"Compra realizada. Entradas restantes: {funcion.cupo}")
+            messages.success(request, f"Compra iniciada. Redirigiendo a Mercado Pago...")
+            return redirect("pagar", idfuncion=funcion.idfuncion)
         else:
             messages.error(request, "No hay suficientes entradas disponibles.")
 
@@ -198,7 +232,8 @@ def show4(request):
         if cantidad <= funcion.cupo:
             funcion.cupo -= cantidad
             funcion.save(update_fields=["cupo"])
-            messages.success(request, f"Compra realizada. Entradas restantes: {funcion.cupo}")
+            messages.success(request, f"Compra iniciada. Redirigiendo a Mercado Pago...")
+            return redirect("pagar", idfuncion=funcion.idfuncion)
         else:
             messages.error(request, "No hay suficientes entradas disponibles.")
 
