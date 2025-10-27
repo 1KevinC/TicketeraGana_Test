@@ -1,12 +1,18 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Stand Up de Parejas - Gana Producciones</title>
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    .msg-bajo-boton{margin-top:.75rem;font-weight:600}
+    .msg-bajo-boton .error{color:#b00020}
+    .msg-bajo-boton .success{color:#0a7d0a}
+    .msg-bajo-boton .info{color:#0b57d0}
+    .msg-bajo-boton .warning{color:#b26a00}
+  </style>
 </head>
 <body>
   <!-- ENCABEZADO -->
@@ -15,19 +21,21 @@
       <a href="{% url 'cartelera' %}" class="logo">
         <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
       </a>
-      <nav class="menu">
-        <ul>
-          <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
-          <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
-          <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
-          {% if request.user.is_authenticated %}
-            <li><span>Hola, {{ request.user.first_name|default:request.user.username }}</span></li>
-            <li><a href="{% url 'logout' %}">Salir</a></li>
-          {% else %}
-            <li><a href="{% url 'login' %}">Login</a></li>
-          {% endif %}
-        </ul>
-      </nav>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
+                    <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+
+                    {% if request.user.is_authenticated %}
+                        <!-- Convertimos el "Hola, ..." en link a Mi perfil -->
+                        <li><a href="{% url 'mi_perfil_usuario' %}">Hola, {{ request.user.first_name|default:request.user.username }}</a></li>
+                        <li><a href="{% url 'logout' %}">Salir</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
     </div>
   </header>
 
@@ -42,8 +50,9 @@
       <p><strong>Idioma:</strong> Español</p>
       <p><strong>Duración:</strong> 1h</p>
 
-      <form method="post" class="form-compra">
+      <form method="post" class="form-compra" novalidate>
         {% csrf_token %}
+
         <label for="funcion">Seleccioná fecha y hora:</label>
         <select id="funcion" name="funcion" required>
           {% for f in funciones %}
@@ -56,18 +65,19 @@
         </select>
 
         <label for="entradas">Cantidad de entradas:</label>
-        <input type="number" id="entradas" name="entradas" min="1" value="1">
+        <input type="number" id="entradas" name="entradas" min="1" value="1" required>
 
         <button type="submit" class="btn-comprar1">Comprar</button>
-      </form>
 
-      {% if messages %}
-      <ul class="msgs">
-        {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
+        <!-- MENSAJES JUSTO DEBAJO DEL BOTÓN -->
+        {% if messages %}
+          <div class="msg-bajo-boton" role="status" aria-live="polite">
+            {% for message in messages %}
+              <p class="{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </form>
     </div>
   </main>
 
@@ -80,7 +90,7 @@
     </p>
 
     <div class="ubicacion-contenido">
-      <iframe 
+      <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.988358979311!2d-58.39278849059782!3d-34.60445587284121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccb0025487385%3A0x2bd604e5f9d26022!2sCAFE%20KONCERT!5e0!3m2!1ses!2sar!4v1759103442744!5m2!1ses!2sar"
         loading="lazy">
       </iframe>
@@ -100,12 +110,10 @@
     <p>&copy; 2025 Gana Producciones - Todos los derechos reservados</p>
   </footer>
 
-  <!-- SCRIPT OPCIONAL: MOSTRAR MENSAJES TEMPORALMENTE -->
+  <!-- Oculta el bloque de mensajes a los 6s (opcional) -->
   <script>
-    const msgs = document.querySelector('.msgs');
-    if (msgs) {
-      setTimeout(() => msgs.remove(), 6000);
-    }
+    const msg = document.querySelector('.msg-bajo-boton');
+    if (msg) { setTimeout(() => msg.remove(), 6000); }
   </script>
 </body>
 </html>

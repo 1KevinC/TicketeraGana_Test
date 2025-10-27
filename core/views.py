@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.conf import settings
 
-# import mercadopago
+import mercadopago
 
 from .models_usuarios import Usuario
 from .models import Funcion

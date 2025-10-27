@@ -1,95 +1,123 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Escuela de Superhéroes- Gana Producciones</title>
-   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <meta charset="UTF-8" />
+  <title>Escuela de Superhéroes - Gana Producciones</title>
+  <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    .msg-bajo-boton{margin-top:.75rem;font-weight:600}
+    .msg-bajo-boton .error{color:#b00020}
+    .msg-bajo-boton .success{color:#0a7d0a}
+    .msg-bajo-boton .info{color:#0b57d0}
+    .msg-bajo-boton .warning{color:#b26a00}
+  </style>
 </head>
 <body>
-  <!-- menu -->
-<header class="main">
+  <!-- ENCABEZADO -->
+  <header class="main">
     <div class="logo-barra">
-        <a href="{% url 'cartelera' %}" class="logo">
-            <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
-        </a>
-        <nav class="menu">
-            <ul>
+      <a href="{% url 'cartelera' %}" class="logo">
+        <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
+      </a>
+            <nav class="menu">
+                <ul>
                     <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
                     <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
                     <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
 
                     {% if request.user.is_authenticated %}
-                    <li><span>Hola, {{ request.user.first_name|default:request.user.username }}</span></li>
-                    <li><a href="{% url 'logout' %}">Salir</a></li>
+                        <!-- Convertimos el "Hola, ..." en link a Mi perfil -->
+                        <li><a href="{% url 'mi_perfil_usuario' %}">Hola, {{ request.user.first_name|default:request.user.username }}</a></li>
+                        <li><a href="{% url 'logout' %}">Salir</a></li>
                     {% else %}
-
-                    <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'login' %}">Login</a></li>
                     {% endif %}
                 </ul>
-        </nav>
+            </nav>
     </div>
-</header>
+  </header>
 
-<main class="container">
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="container">
     <div class="imagen-show4">
-     <img src="{% static 'img/esc.sup.jpg' %}" alt="Show 4">
+      <img src="{% static 'img/esc.sup.jpg' %}" alt="Escuela de Superhéroes">
     </div>
 
     <div class="info-show4">
-      <h2>Escuela de Superhéhoes</h2>
-      <p><strong>Idiomas:</strong> Español</p>
+      <h2>Escuela de Superhéroes</h2>
+      <p><strong>Idioma:</strong> Español</p>
       <p><strong>Duración:</strong> 1h</p>
-      <form class="form-compra4">
-        <label for="fecha">Fecha y hora:</label>
-        <select id="fecha" name="fecha">
-          <option>Jueves 23/09 - 20hs</option>
-          <option>Viernes 24/09 - 21hs</option>
-          <option>Sábado 25/09 - 22hs</option>
+
+      <!-- FORM CONECTADO A LA BD (igual que show1) -->
+      <form method="post" class="form-compra4" novalidate>
+        {% csrf_token %}
+
+        <label for="funcion">Seleccioná fecha y hora:</label>
+        <select id="funcion" name="funcion" required>
+          {% for f in funciones %}
+            <option value="{{ f.idfuncion }}">
+              {{ f.fecha|date:"d/m/Y" }} - {{ f.hora|time:"H:i" }}hs — ${{ f.precio }} ({{ f.cupo }} disponibles)
+            </option>
+          {% empty %}
+            <option disabled>No hay funciones disponibles</option>
+          {% endfor %}
         </select>
 
         <label for="entradas">Cantidad de entradas:</label>
-        <input type="number" id="entradas" name="entradas" min="1" max="10" value="1">
+        <input type="number" id="entradas" name="entradas" min="1" value="1" required>
 
         <p class="aviso"><strong>Información importante:</strong> Revisá tu pedido atentamente. Una vez confirmado, no se admitirán cambios ni cancelaciones.</p>
-        <p class="aviso">Al finalizar el proceso de pago recibirás un mail con tu entrada en formato QR al Gmail registrado en tu usuario.</p>
+        <p class="aviso">Al finalizar el pago recibirás un mail con tu entrada en formato QR al Gmail registrado.</p>
 
-        <button type="button" class="btn-comprar4">Comprar</button>
+        <button type="submit" class="btn-comprar4">Comprar</button>
+
+        <!-- MENSAJES JUSTO DEBAJO DEL BOTÓN -->
+        {% if messages %}
+          <div class="msg-bajo-boton" role="status" aria-live="polite">
+            {% for message in messages %}
+              <p class="{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
       </form>
     </div>
   </main>
 
-<section class="ubicacion">
-  <h3>Ubicación</h3>
-  <p>
-    <strong>Sala Konzert Café - Paseo La Plaza:</strong>
-    Av. Corrientes 1660 C1042AAP, C1042 AAP, Cdad. Autónoma de Buenos Aires
-  </p>
+  <!-- SECCIÓN UBICACIÓN -->
+  <section class="ubicacion">
+    <h3>Ubicación</h3>
+    <p>
+      <strong>Sala Konzert Café - Paseo La Plaza:</strong>
+      Av. Corrientes 1660, Ciudad Autónoma de Buenos Aires
+    </p>
 
-  <div class="ubicacion-contenido">
-    <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.988358979311!2d-58.39278849059782!3d-34.60445587284121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccb0025487385%3A0x2bd604e5f9d26022!2sCAFE%20KONCERT!5e0!3m2!1ses!2sar!4v1759103442744!5m2!1ses!2sar"
-      loading="lazy">
-    </iframe>
+    <div class="ubicacion-contenido">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.988358979311!2d-58.39278849059782!3d-34.60445587284121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccb0025487385%3A0x2bd604e5f9d26022!2sCAFE%20KONCERT!5e0!3m2!1ses!2sar!4v1759103442744!5m2!1ses!2sar"
+        loading="lazy">
+      </iframe>
 
-    <div class="como-llegar">
-      <h4>Cómo llegar:</h4>
-      <p><strong>Colectivos:</strong> 5, 6, 7, 12, 23, 24, 26, 29, 37, 39, 50, 60, 75, 98, 99, 102, 105, 109, 111, 115, 124, 140, 146, 150, 180</p>
-      <p><strong>Subtes (Metro):</strong> CALLAO (Línea B), URUGUAY (Línea B)</p>
+      <div class="como-llegar">
+        <h4>Cómo llegar:</h4>
+        <p><strong>Colectivos:</strong> 5, 6, 7, 12, 23, 24, 26, 29, 37, 39, 50, 60, 75, 98, 99, 102, 105, 109, 111, 115, 124, 140, 146, 150, 180</p>
+        <p><strong>Subte:</strong> CALLAO (Línea B), URUGUAY (Línea B)</p>
+      </div>
     </div>
-  </div>
 
-  <a 
-    href="https://maps.app.goo.gl/jcYi8FPjjJ24oodV8"     target="_blank"
-    class="btn-maps">
-    Ver en Maps
-  </a>
-</section>
+    <a href="https://maps.app.goo.gl/jcYi8FPjjJ24oodV8" target="_blank" class="btn-maps">Ver en Maps</a>
+  </section>
 
+  <!-- PIE DE PÁGINA -->
   <footer>
     <p>&copy; 2025 Gana Producciones - Todos los derechos reservados</p>
   </footer>
+
+  <!-- Oculta el bloque de mensajes a los 6s (opcional) -->
+  <script>
+    const msg = document.querySelector('.msg-bajo-boton');
+    if (msg) { setTimeout(() => msg.remove(), 6000); }
+  </script>
 </body>
 </html>
