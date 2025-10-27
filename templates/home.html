@@ -1,4 +1,3 @@
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -12,10 +11,8 @@
     <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-
 <body>
-    
-     <header class="main">
+    <header class="main">
         <div class="logo-barra">
             <a href="{% url 'cartelera' %}" class="logo">
                 <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
@@ -27,11 +24,11 @@
                     <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
 
                     {% if request.user.is_authenticated %}
-                    <li><span>Hola, {{ request.user.first_name|default:request.user.username }}</span></li>
-                    <li><a href="{% url 'logout' %}">Salir</a></li>
+                        <!-- Convertimos el "Hola, ..." en link a Mi perfil -->
+                        <li><a href="{% url 'mi_perfil_usuario' %}">Hola, {{ request.user.first_name|default:request.user.username }}</a></li>
+                        <li><a href="{% url 'logout' %}">Salir</a></li>
                     {% else %}
-
-                    <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'login' %}">Login</a></li>
                     {% endif %}
                 </ul>
             </nav>
@@ -46,7 +43,6 @@
 
     <footer class="footer">
         <p>Todos los derechos reservados © Gana Producciones</p>
-    </footer> 
-
+    </footer>
 </body>
 </html>

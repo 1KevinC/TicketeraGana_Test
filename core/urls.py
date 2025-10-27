@@ -1,21 +1,23 @@
 from django.urls import path
+from django.views.generic import TemplateView
+
 from .views import (
     login_view, logout_view,
     lista_usuarios, nuevo_usuario, crear_usuario,
     home, cartelera, contrataciones, nosotros, compra,
     show1, show2, show3, show4,
-    pagar_view  # nueva vista de pago
+    pagar_view,
+    mi_perfil_usuario,
 )
-from django.views.generic import TemplateView
 
 urlpatterns = [
     # ---------------------- PÁGINAS PRINCIPALES ----------------------
     path('', home, name='home'),
     path('home/', home, name='home_alt'),
-
     path('cartelera/', cartelera, name='cartelera'),
     path('contrataciones/', contrataciones, name='contrataciones'),
     path('nosotros/', nosotros, name='nosotros'),
+    path('mi-perfil/', mi_perfil_usuario, name='mi_perfil_usuario'),
 
     # ---------------------- AUTENTICACIÓN ----------------------
     path('login/', login_view, name='login'),

@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi perfil</title>
+  <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<header class="main">
+  <div class="logo-barra">
+    <a href="{% url 'home' %}" class="logo">
+      <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
+    </a>
+    <nav class="menu">
+      <ul>
+        <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'mi_perfil_usuario' %}">Mi perfil</a></li>
+          <li><a href="{% url 'logout' %}">Salir</a></li>
+        {% else %}
+          <li><a href="{% url 'login' %}">Ingresar</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="login-container">
+  <h2>Editar mis datos</h2>
+
+  {% if messages %}
+    <ul class="mensajes">
+      {% for m in messages %}
+        <li class="{{ m.tags }}">{{ m }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" class="formulario">
+    {% csrf_token %}
+    <fieldset>
+      <legend>Datos de la cuenta</legend>
+
+      {{ form.non_field_errors }}
+
+      <div class="campo">
+        <label for="{{ form.nombre.id_for_label }}">Nombre</label>
+        {{ form.nombre }}
+        {{ form.nombre.errors }}
+      </div>
+
+      <div class="campo">
+        <label for="{{ form.apellido.id_for_label }}">Apellido</label>
+        {{ form.apellido }}
+        {{ form.apellido.errors }}
+      </div>
+
+      <div class="campo">
+        <label for="{{ form.email.id_for_label }}">Email (será tu usuario)</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+      </div>
+
+      <div class="campo">
+        <label for="{{ form.contrasena.id_for_label }}">Contraseña</label>
+        {{ form.contrasena }}
+        <small>Dejar vacío para no cambiar.</small>
+        {{ form.contrasena.errors }}
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn">Guardar</button>
+  </form>
+</main>
+</body>
+</html>

@@ -15,20 +15,21 @@
         <a href="{% url 'cartelera' %}" class="logo">
             <img src="{% static 'img/logoGana.jpg' %}" alt="Gana Producciones" class="logo-img">
         </a>
-        <nav class="menu">
-            <ul>
-                <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
-                <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
-                <li><a href="{% url 'nosotros' %}" class="activo">Nosotros</a></li>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{% url 'cartelera' %}">Cartelera</a></li>
+                    <li><a href="{% url 'contrataciones' %}">Contrataciones</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
 
-                {% if request.user.is_authenticated %}
-                <li><span>Hola, {{ request.user.first_name|default:request.user.username }}</span></li>
-                <li><a href="{% url 'logout' %}">Salir</a></li>
-                {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+                    {% if request.user.is_authenticated %}
+                        <!-- Convertimos el "Hola, ..." en link a Mi perfil -->
+                        <li><a href="{% url 'mi_perfil_usuario' %}">Hola, {{ request.user.first_name|default:request.user.username }}</a></li>
+                        <li><a href="{% url 'logout' %}">Salir</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
     </div>
 </header>
 

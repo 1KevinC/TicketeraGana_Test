@@ -7,10 +7,54 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.conf import settings
 
-import mercadopago
+# import mercadopago
 
 from .models_usuarios import Usuario
 from .models import Funcion
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .forms import UsuarioPerfilForm
+from django.db import transaction
+
+@login_required
+def mi_perfil_usuario(request):
+    # tratamos de mapear por email de Django; si no, por username
+    email_sesion = (request.user.email or request.user.username or "").strip().lower()
+    if not email_sesion:
+        messages.error(request, "Tu usuario de sesión no tiene email. No se puede vincular con la tabla 'usuario'.")
+        return redirect("home")
+
+    # si no existe fila en 'usuario', la creamos con ese email
+    perfil, _ = Usuario.objects.get_or_create(email=email_sesion, defaults={
+        "nombre": request.user.first_name or "",
+        "apellido": request.user.last_name or "",
+        "contrasena": "",  # no sabemos la actual
+        "rol": "cliente",  # o lo que corresponda
+    })
+
+    if request.method == "POST":
+        form = UsuarioPerfilForm(request.POST, instance=perfil)
+        if form.is_valid():
+            with transaction.atomic():
+                perfil = form.save()  # UPDATE sobre la fila actual
+                # opcional: sincronizar datos básicos con el User de Django
+                try:
+                    request.user.first_name = perfil.nombre
+                    request.user.last_name = perfil.apellido
+                    if request.user.email:  # si ya usás email real en Django
+                        request.user.email = perfil.email
+                    request.user.save(update_fields=["first_name", "last_name", "email"])
+                except Exception:
+                    # si esto falla, no me voy a morir: el dato quedó en tu tabla 'usuario'
+                    pass
+            messages.success(request, "Perfil actualizado correctamente.")
+            return redirect("mi_perfil_usuario")
+        else:
+            messages.error(request, "Revisá los errores del formulario.")
+    else:
+        form = UsuarioPerfilForm(instance=perfil)
+
+    return render(request, "mi_perfil_usuario.html", {"form": form})
 
 
 # ---------------------- LOGIN / LOGOUT ----------------------

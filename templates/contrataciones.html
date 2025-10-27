@@ -22,11 +22,11 @@
                     <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
 
                     {% if request.user.is_authenticated %}
-                    <li><span>Hola, {{ request.user.first_name|default:request.user.username }}</span></li>
-                    <li><a href="{% url 'logout' %}">Salir</a></li>
+                        <!-- Convertimos el "Hola, ..." en link a Mi perfil -->
+                        <li><a href="{% url 'mi_perfil_usuario' %}">Hola, {{ request.user.first_name|default:request.user.username }}</a></li>
+                        <li><a href="{% url 'logout' %}">Salir</a></li>
                     {% else %}
-
-                    <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'login' %}">Login</a></li>
                     {% endif %}
                 </ul>
             </nav>
