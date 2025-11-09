@@ -66,12 +66,14 @@
 }
 
 .eslogan {
-    font-size: 2.5rem;
+    font-size: 3rem; 
     color: var(--blanco);
     text-align: center;
     max-width: 80%;
     line-height: 1.3;
-    font-weight: bold;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif; 
+    letter-spacing: 1px; 
 }
 
 .footer {
